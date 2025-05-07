@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tubes_abp/model/burger_model.dart';
 import 'package:tubes_abp/model/pizza_model.dart';
+import 'package:tubes_abp/pages/detail_page.dart';
 import 'package:tubes_abp/service/pizza_data.dart';
 import 'package:tubes_abp/service/widget_support.dart';
 import 'package:tubes_abp/model/category_model.dart';
@@ -17,16 +18,16 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<CategoryModel> categories = [];
-  List<PizzaModel> pizza = [];
-  List<BurgerModel> burger = [];
+  List<PizzaModel> burger = [];
+  List<BurgerModel> pizza = [];
   String track = "0";
 
   @override
   void initState() {
     super.initState();
     categories = getCategory();
-    pizza = getPizza();
-    burger = getBurger();
+    pizza = getBurger();
+    burger = getPizza();
   }
 
   @override
@@ -195,20 +196,25 @@ class _HomeState extends State<Home> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Container(
-                height: 50,
-                width: 80,
-                decoration: BoxDecoration(
-                  color: Color(0xffef2b39),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(20),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailPage(image: image, name: name, price: price,)));
+                },
+                child: Container(
+                  height: 50,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    color: Color(0xffef2b39),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(20),
+                    ),
                   ),
-                ),
-                child: Icon(
-                  Icons.arrow_forward,
-                  color: Colors.white,
-                  size: 30.0,
+                  child: Icon(
+                    Icons.arrow_forward,
+                    color: Colors.white,
+                    size: 30.0,
+                  ),
                 ),
               ),
             ],
