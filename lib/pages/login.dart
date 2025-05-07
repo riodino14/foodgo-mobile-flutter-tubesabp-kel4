@@ -45,7 +45,7 @@ class _LogInState extends State<LogIn> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
             SizedBox(height: 20.0,),
-            Center(child: Text("SignUp", style: AppWidget.HeadLineTextFieldStyle(),)),
+            Center(child: Text("LogIn", style: AppWidget.HeadLineTextFieldStyle(),)),
             SizedBox(height: 10.0,),
             SizedBox(height: 20.0,),
             Text("Email", style: AppWidget.SignUpTextFieldStyle(),
