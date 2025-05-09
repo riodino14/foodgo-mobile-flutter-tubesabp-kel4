@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tubes_abp/pages/detail_page.dart';
 import 'package:tubes_abp/pages/login.dart';
@@ -6,7 +7,9 @@ import 'package:tubes_abp/pages/home.dart';
 import 'package:tubes_abp/pages/bottomnav.dart';
 import 'package:tubes_abp/pages/signup.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -37,7 +40,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: SignUp()
+      home: SignUp(),
     );
   }
 }
