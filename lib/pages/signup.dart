@@ -27,25 +27,31 @@ class _SignUpState extends State<SignUp> {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
+
         String Id = randomAlphaNumeric(10);
 
         Map<String, dynamic> userInfoMap = {
           "Name": nameController.text,
           "Email": mailController.text,
           "Id": Id,
-        }; 
+        };
         await SharedPreferenceHelper().saveUserEmail(email);
         await SharedPreferenceHelper().saveUserName(nameController.text);
+        await SharedPreferenceHelper().saveUserId(Id);
         await DatabaseMethods().addUserDetails(userInfoMap, Id);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.green,
-              content: Text(
-                "Registration Successful",
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-              )));
-        Navigator.push(context, MaterialPageRoute(builder: (context) => BottomNav()));
-
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Text(
+              "Registration Successful",
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+          ),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => BottomNav()),
+        );
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -54,7 +60,9 @@ class _SignUpState extends State<SignUp> {
               content: Text(
                 "Password Provided is too Weak",
                 style: TextStyle(fontSize: 18.0),
-              )));
+              ),
+            ),
+          );
         } else if (e.code == 'email-already-in-use') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -62,7 +70,9 @@ class _SignUpState extends State<SignUp> {
               content: Text(
                 "Account Already exists",
                 style: TextStyle(fontSize: 18.0),
-              )));
+              ),
+            ),
+          );
         }
       }
     }
@@ -184,13 +194,15 @@ class _SignUpState extends State<SignUp> {
                       SizedBox(height: 30.0),
                       GestureDetector(
                         onTap: () {
-                          if(nameController.text!="" && mailController.text!="" && passwordController.text!=""){
+                          if (nameController.text != "" &&
+                              mailController.text != "" &&
+                              passwordController.text != "") {
                             setState(() {
-                              name=nameController.text;
-                            email=mailController.text;
-                            password=passwordController.text;
+                              name = nameController.text;
+                              email = mailController.text;
+                              password = passwordController.text;
                             });
-                          registration();  
+                            registration();
                           }
                         },
                         child: Container(
