@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:random_string/random_string.dart';
@@ -13,7 +14,12 @@ class DetailPage extends StatefulWidget {
   final String name;
   final String price;
 
-  DetailPage({required this.image, required this.name, required this.price});
+  const DetailPage({
+    super.key,
+    required this.image,
+    required this.name,
+    required this.price,
+  });
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -22,7 +28,7 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   Map<String, dynamic>? paymentIntent;
   int quantity = 1, totalprice = 0;
-  String? name, id, email, address;
+  String? name, id, email, address, wallet;
   TextEditingController addresscontroller = TextEditingController();
 
   getthesharedpref() async {
@@ -36,10 +42,20 @@ class _DetailPageState extends State<DetailPage> {
     setState(() {});
   }
 
+  getUserWallet() async {
+    await getthesharedpref();
+    QuerySnapshot querySnapshot = await DatabaseMethods().getUserWalletbyemail(
+      email!,
+    );
+    wallet = "${querySnapshot.docs[0]["Wallet"]}";
+    print(wallet);
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
-    getthesharedpref();
+    getUserWallet();
     totalprice = int.parse(widget.price);
   }
 
@@ -124,7 +140,7 @@ class _DetailPageState extends State<DetailPage> {
   createPaymentIntent(String amount, String currency) async {
     try {
       Map<String, dynamic> body = {
-        'amount': (int.parse(amount) * 100).toString(),
+        'amount': calculateAmount(amount),
         'currency': currency,
         'payment_method_types[]': 'card',
       };
@@ -175,7 +191,7 @@ class _DetailPageState extends State<DetailPage> {
             ),
             SizedBox(height: 20.0),
             Text(widget.name, style: AppWidget.HeadLineTextFieldStyle()),
-            Text("\$" + widget.price, style: AppWidget.priceTextFieldStyle()),
+            Text("\$${widget.price}", style: AppWidget.priceTextFieldStyle()),
             SizedBox(height: 30.0),
             Padding(
               padding: const EdgeInsets.only(right: 10.0),
@@ -264,8 +280,65 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 SizedBox(width: 30.0),
                 GestureDetector(
-                  onTap: () {
-                    makePayment(totalprice.toString());
+                  onTap: () async {
+                    if (address == null) {
+                      openBox();
+                    } else if (int.parse(wallet!) > totalprice) {
+                      int updatedwallet = int.parse(wallet!) - totalprice;
+                      await DatabaseMethods().updateUserWallet(
+                        updatedwallet.toString(),
+                        id!,
+                      );
+                      String orderId = randomAlphaNumeric(10);
+                      Map<String, dynamic> userOrderMap = {
+                        "Name": name,
+                        "Id": id,
+                        "Quantity": quantity.toString(),
+                        "Total": totalprice.toString(),
+                        "Email": email,
+                        "FoodName": widget.name,
+                        "FoodImage": widget.image,
+                        "OrderId": orderId,
+                        "Status": "Pending",
+                        "Address": address ?? addresscontroller.text,
+                      };
+
+                      await DatabaseMethods().addUserOrderDetails(
+                        userOrderMap,
+                        id!,
+                        orderId,
+                      );
+                      await DatabaseMethods().addAdminOrderDetails(
+                        userOrderMap,
+                        orderId,
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.green,
+                          content: Text(
+                            "Order Placed Successfully!!",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text(
+                            "Add some money to your Wallet",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
                   },
                   child: Material(
                     elevation: 3.0,
@@ -341,6 +414,7 @@ class _DetailPageState extends State<DetailPage> {
                 SizedBox(height: 20.0),
                 GestureDetector(
                   onTap: () async {
+                    address = addresscontroller.text;
                     await SharedPreferenceHelper().saveUserAddress(
                       addresscontroller.text,
                     );
@@ -356,7 +430,7 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       child: Center(
                         child: Text(
-                          "add",
+                          "Add",
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -371,4 +445,10 @@ class _DetailPageState extends State<DetailPage> {
           ),
         ),
   );
+
+  calculateAmount(String amount) {
+    final calculatedAmount = (int.parse(amount) * 100);
+
+    return calculatedAmount.toString();
+  }
 }

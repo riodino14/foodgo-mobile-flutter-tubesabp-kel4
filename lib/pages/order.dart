@@ -162,7 +162,7 @@ class _OrderState extends State<Order> {
                 child: Column(
                   children: [
                     SizedBox(height: 20.0),
-                    Container(
+                    SizedBox(
                       height: MediaQuery.of(context).size.height / 1.5,
                       child: allOrders(),
                     ),

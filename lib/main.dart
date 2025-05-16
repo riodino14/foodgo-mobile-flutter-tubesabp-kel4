@@ -1,11 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:tubes_abp/pages/detail_page.dart';
-import 'package:tubes_abp/pages/login.dart';
-import 'package:tubes_abp/pages/onboarding.dart';
-import 'package:tubes_abp/pages/home.dart';
-import 'package:tubes_abp/pages/bottomnav.dart';
+import 'package:tubes_abp/Admin/admin_login.dart';
 import 'package:tubes_abp/pages/signup.dart';
 import 'package:tubes_abp/service/constant.dart';
 
@@ -43,7 +39,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: SignUp(),
+      home: AdminLogIn(),
     );
   }
 }

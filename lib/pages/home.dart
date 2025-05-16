@@ -102,7 +102,7 @@ class _HomeState extends State<Home> {
               ],
             ),
             SizedBox(height: 20),
-            Container(
+            SizedBox(
               height: 70,
               child: ListView.builder(
                 itemCount: categories.length,
@@ -191,7 +191,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           Text(name, style: AppWidget.boldTextFieldStyle()),
-          Text("\$" + price, style: AppWidget.priceTextFieldStyle()),
+          Text("\$$price", style: AppWidget.priceTextFieldStyle()),
           Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

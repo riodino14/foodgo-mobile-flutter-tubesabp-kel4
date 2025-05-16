@@ -16,13 +16,12 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   String email = "", password = "", name = "";
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
-  TextEditingController mailController = new TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController mailController = TextEditingController();
 
   registration() async {
-    if (password != null &&
-        nameController.text != "" &&
+    if (nameController.text != "" &&
         mailController.text != "") {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
@@ -34,6 +33,7 @@ class _SignUpState extends State<SignUp> {
           "Name": nameController.text,
           "Email": mailController.text,
           "Id": Id,
+          "Wallet":"0",
         };
         await SharedPreferenceHelper().saveUserEmail(email);
         await SharedPreferenceHelper().saveUserName(nameController.text);
