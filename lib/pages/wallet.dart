@@ -17,7 +17,7 @@ class Wallet extends StatefulWidget {
 }
 
 class _WalletState extends State<Wallet> {
-  TextEditingController amountcontroller = new TextEditingController();
+  TextEditingController amountcontroller = TextEditingController();
   Map<String, dynamic>? paymentIntent;
 
   String? email, wallet, id;
@@ -108,7 +108,7 @@ class _WalletState extends State<Wallet> {
                                                 AppWidget.boldTextFieldStyle(),
                                           ),
                                           Text(
-                                            "\$" + wallet!,
+                                            "\$${wallet!}",
                                             style:
                                                 AppWidget.HeadLineTextFieldStyle(),
                                           ),
@@ -222,6 +222,28 @@ class _WalletState extends State<Wallet> {
                                     "Add Money",
                                     style: AppWidget.boldWhiteTextFieldStyle(),
                                   ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20.0),
+                            Expanded(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 10.0),
+                                    Text(
+                                      "Your Transactions",
+                                      style: AppWidget.boldTextFieldStyle(),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),

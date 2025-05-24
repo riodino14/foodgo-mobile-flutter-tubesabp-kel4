@@ -47,9 +47,41 @@ class DatabaseMethods {
   }
 
   Future updateUserWallet(String amount, String id) async {
+    return await FirebaseFirestore.instance.collection("users").doc(id).update({
+      "Wallet": amount,
+    });
+  }
+
+  Future<Stream<QuerySnapshot>> getAdminOrders() async {
+    return FirebaseFirestore.instance
+        .collection("Orders")
+        .where("Status", isEqualTo: "Pending")
+        .snapshots();
+  }
+
+  Future updateAdminOrder(String id) async {
+    return await FirebaseFirestore.instance.collection("Orders").doc(id).update(
+      {"Status": "Delivered"},
+    );
+  }
+
+  Future updateUserOrder(String userid, String docid) async {
+    return await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userid)
+        .collection("Orders")
+        .doc(docid)
+        .update({"Status": "Delivered"});
+  }
+
+  Future<Stream<QuerySnapshot>> getAllUsers() async {
+    return FirebaseFirestore.instance.collection("users").snapshots();
+  }
+
+  Future deleteUser(String id) async {
     return await FirebaseFirestore.instance
         .collection("users")
         .doc(id)
-        .update({"Wallet": amount,});
+        .delete();
   }
 }

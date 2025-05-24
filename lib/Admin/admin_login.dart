@@ -11,8 +11,8 @@ class AdminLogIn extends StatefulWidget {
 }
 
 class _AdminLogInState extends State<AdminLogIn> {
-  TextEditingController usernamecontroller = new TextEditingController();
-  TextEditingController passwordcontroller = new TextEditingController();
+  TextEditingController usernamecontroller = TextEditingController();
+  TextEditingController passwordcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,7 +112,9 @@ class _AdminLogInState extends State<AdminLogIn> {
                       ),
                       SizedBox(height: 30.0),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          loginAdmin();
+                        },
                         child: Container(
                           width: 200,
                           height: 60,
@@ -142,7 +144,7 @@ class _AdminLogInState extends State<AdminLogIn> {
 
   loginAdmin() {
     FirebaseFirestore.instance.collection("Admin").get().then((snapshot) {
-      snapshot.docs.forEach((result) {
+      for (var result in snapshot.docs) {
         if (result.data()['username'] != usernamecontroller.text.trim()) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -169,7 +171,7 @@ class _AdminLogInState extends State<AdminLogIn> {
             MaterialPageRoute(builder: (context) => HomeAdmin()),
           );
         }
-      });
+      }
     });
   }
 }
