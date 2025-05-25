@@ -84,4 +84,33 @@ class DatabaseMethods {
         .doc(id)
         .delete();
   }
+
+  Future addUserTransaction(
+    Map<String, dynamic> userOrderMap,
+    String id,
+  ) async {
+    return await FirebaseFirestore.instance
+        .collection("users")
+        .doc(id)
+        .collection("Transaction")
+        .add(userOrderMap);
+  }
+
+  Future<Stream<QuerySnapshot>> getUserTransactions(String id) async {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .doc(id)
+        .collection("Transaction")
+        .snapshots();
+  }
+
+  Future<QuerySnapshot> search(String updatedname) async {
+    return await FirebaseFirestore.instance
+        .collection("Food")
+        .where(
+          "SearchKey",
+          isEqualTo: updatedname.substring(0, 1).toUpperCase(),
+        )
+        .get();
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tubes_abp/model/burger_model.dart';
 import 'package:tubes_abp/model/pizza_model.dart';
@@ -7,6 +8,7 @@ import 'package:tubes_abp/service/widget_support.dart';
 import 'package:tubes_abp/model/category_model.dart';
 import 'package:tubes_abp/service/category_data.dart';
 import 'package:tubes_abp/service/burger_data.dart';
+import 'package:tubes_abp/service/database.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -20,6 +22,8 @@ class _HomeState extends State<Home> {
   List<PizzaModel> burger = [];
   List<BurgerModel> pizza = [];
   String track = "0";
+  bool search = false;
+  TextEditingController searchcontroller = new TextEditingController();
 
   @override
   void initState() {
@@ -27,6 +31,40 @@ class _HomeState extends State<Home> {
     categories = getCategory();
     pizza = getBurger();
     burger = getPizza();
+  }
+
+  var queryResultSet = [];
+  var tempSearchStore = [];
+
+  initiateSearch(value) {
+    if (value.length == 0) {
+      setState(() {
+        queryResultSet = [];
+        tempSearchStore = [];
+      });
+    }
+    setState(() {
+      search = true;
+    });
+
+    var CapitalizedValue =
+        value.substring(0, 1).toUpperCase() + value.substring(1);
+    if (queryResultSet.isEmpty && value.length == 1) {
+      DatabaseMethods().search(value).then((QuerySnapshot docs) {
+        for (int i = 0; i < docs.docs.length; ++i) {
+          queryResultSet.add(docs.docs[i].data());
+        }
+      });
+    } else {
+      tempSearchStore = [];
+      queryResultSet.forEach((element) {
+        if (element["Name"].startsWith(CapitalizedValue)) {
+          setState(() {
+            tempSearchStore.add(element);
+          });
+        }
+      });
+    }
   }
 
   @override
@@ -81,6 +119,10 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: TextField(
+                      controller: searchcontroller,
+                      onChanged: (value) {
+                        initiateSearch(value.toUpperCase());
+                      },
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Search your favorite food",
