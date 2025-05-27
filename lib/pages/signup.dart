@@ -21,8 +21,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController mailController = TextEditingController();
 
   registration() async {
-    if (nameController.text != "" &&
-        mailController.text != "") {
+    if (nameController.text != "" && mailController.text != "") {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
@@ -33,7 +32,7 @@ class _SignUpState extends State<SignUp> {
           "Name": nameController.text,
           "Email": mailController.text,
           "Id": Id,
-          "Wallet":"0",
+          "Wallet": "0",
         };
         await SharedPreferenceHelper().saveUserEmail(email);
         await SharedPreferenceHelper().saveUserName(nameController.text);

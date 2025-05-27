@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:intl/intl.dart';
 import 'package:tubes_abp/service/constant.dart';
 import 'package:tubes_abp/service/database.dart';
 import 'package:tubes_abp/service/shared_pref.dart';
@@ -30,6 +31,7 @@ class _WalletState extends State<Wallet> {
 
   getUserWallet() async {
     await getthesharedpref();
+    walletStream = await DatabaseMethods().getUserTransactions(id!);
     QuerySnapshot querySnapshot = await DatabaseMethods().getUserWalletbyemail(
       email!,
     );
@@ -42,6 +44,60 @@ class _WalletState extends State<Wallet> {
   void initState() {
     getUserWallet();
     super.initState();
+  }
+
+  Stream? walletStream;
+
+  Widget allTransactions() {
+    return StreamBuilder(
+      stream: walletStream,
+      builder: (context, AsyncSnapshot snapshot) {
+        return snapshot.hasData
+            ? ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: snapshot.data.docs.length,
+              itemBuilder: (context, index) {
+                DocumentSnapshot ds = snapshot.data.docs[index];
+                return Container(
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.only(
+                    left: 20.0,
+                    right: 20.0,
+                    bottom: 20.0,
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFececf8),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        ds["Date"],
+                        style: AppWidget.HeadLineTextFieldStyle(),
+                      ),
+                      SizedBox(width: 20.0),
+                      Column(
+                        children: [
+                          Text("Amount added to wallet"),
+                          Text(
+                            "\$" + ds["Amount"],
+                            style: TextStyle(
+                              color: Color(0xffef2b39),
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+            )
+            : Container();
+      },
+    );
   }
 
   @override
@@ -225,6 +281,35 @@ class _WalletState extends State<Wallet> {
                                 ),
                               ),
                             ),
+                            SizedBox(height: 20.0),
+                            Expanded(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 10.0),
+                                    Text(
+                                      "Your Transactions",
+                                      style: AppWidget.boldTextFieldStyle(),
+                                    ),
+                                    SizedBox(height: 20.0),
+                                    Container(
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                          3,
+                                      child: allTransactions(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -265,6 +350,13 @@ class _WalletState extends State<Wallet> {
             );
             await getUserWallet();
             setState(() {});
+            DateTime now = DateTime.now();
+            String formattedDate = DateFormat("dd MMMM").format(now);
+            Map<String, dynamic> userTransactions = {
+              "Amount": amount,
+              "Date": formattedDate,
+            };
+            await DatabaseMethods().addUserTransaction(userTransactions, id!);
 
             showDialog(
               context: context,

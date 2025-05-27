@@ -1,26 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tubes_abp/service/database.dart';
-import 'package:tubes_abp/service/shared_pref.dart';
 import 'package:tubes_abp/service/widget_support.dart';
 
-class Order extends StatefulWidget {
-  const Order({super.key});
+class AllOrders extends StatefulWidget {
+  const AllOrders({super.key});
 
   @override
-  State<Order> createState() => _OrderState();
+  State<AllOrders> createState() => _AllOrdersState();
 }
 
-class _OrderState extends State<Order> {
-  String? id;
-  getthesahredpref() async {
-    id = await SharedPreferenceHelper().getUserId();
-    setState(() {});
-  }
-
+class _AllOrdersState extends State<AllOrders> {
   getontheload() async {
-    await getthesahredpref();
-    orderStream = await DatabaseMethods().getUserOrder(id!);
+    orderStream = await DatabaseMethods().getAdminOrders();
     setState(() {});
   }
 
@@ -122,6 +114,36 @@ class _OrderState extends State<Order> {
                                     ],
                                   ),
                                   SizedBox(height: 5.0),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.person,
+                                        color: Color(0xffef2b39),
+                                      ),
+                                      SizedBox(width: 10.0),
+                                      Text(
+                                        ds["Name"],
+                                        style:
+                                            AppWidget.SimpleLineTextFieldStyle(),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5.0),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.mail,
+                                        color: Color(0xffef2b39),
+                                      ),
+                                      SizedBox(width: 10.0),
+                                      Text(
+                                        ds["Email"],
+                                        style:
+                                            AppWidget.SimpleLineTextFieldStyle(),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5.0),
                                   Text(
                                     ds["Status"] + "!",
                                     style: TextStyle(
@@ -130,6 +152,34 @@ class _OrderState extends State<Order> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  SizedBox(height: 5.0),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await DatabaseMethods().updateAdminOrder(
+                                        ds.id,
+                                      );
+                                      await DatabaseMethods().updateUserOrder(
+                                        ds["Id"],
+                                        ds.id,
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 100,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "Delivered",
+                                          style:
+                                              AppWidget.WhiteTextFieldStyle(),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.0),
                                 ],
                               ),
                             ],
@@ -153,13 +203,32 @@ class _OrderState extends State<Order> {
         margin: EdgeInsets.only(top: 40.0),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Orders", style: AppWidget.HeadLineTextFieldStyle()),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Color(0xffef2b39),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width / 4.5),
+                  Text("All Orders", style: AppWidget.HeadLineTextFieldStyle()),
+                ],
+              ),
             ),
-            SizedBox(height: 10.0),
+            SizedBox(height: 20.0),
             Expanded(
               child: Container(
                 width: MediaQuery.of(context).size.width,
@@ -173,14 +242,10 @@ class _OrderState extends State<Order> {
                 child: Column(
                   children: [
                     SizedBox(height: 20.0),
-                    Container(
+                    SizedBox(
                       height: MediaQuery.of(context).size.height / 1.5,
                       child: allOrders(),
                     ),
-                    // SizedBox(
-                    //   height: MediaQuery.of(context).size.height / 1.5,
-                    //   child: allOrders(),
-                    // ),
                   ],
                 ),
               ),
