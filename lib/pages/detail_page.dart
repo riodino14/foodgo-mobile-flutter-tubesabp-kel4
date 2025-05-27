@@ -272,7 +272,7 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                     child: Center(
                       child: Text(
-                        "\$$totalprice",
+                        "\$" + totalprice.toString(),
                         style: AppWidget.boldWhiteTextFieldStyle(),
                       ),
                     ),

@@ -67,7 +67,7 @@ class _AllOrdersState extends State<AllOrders> {
                               ),
                               SizedBox(width: 10.0),
                               Text(
-                                "Near Market",
+                                ds["Address"],
                                 style: AppWidget.SimpleLineTextFieldStyle(),
                               ),
                             ],
@@ -86,7 +86,7 @@ class _AllOrdersState extends State<AllOrders> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    ds["Foodname"],
+                                    ds["FoodName"],
                                     style: AppWidget.boldTextFieldStyle(),
                                   ),
                                   SizedBox(height: 5.0),
@@ -159,7 +159,7 @@ class _AllOrdersState extends State<AllOrders> {
                                         ds.id,
                                       );
                                       await DatabaseMethods().updateUserOrder(
-                                        ds["id"],
+                                        ds["Id"],
                                         ds.id,
                                       );
                                     },

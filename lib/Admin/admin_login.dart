@@ -11,8 +11,8 @@ class AdminLogIn extends StatefulWidget {
 }
 
 class _AdminLogInState extends State<AdminLogIn> {
-  TextEditingController usernamecontroller = TextEditingController();
-  TextEditingController passwordcontroller = TextEditingController();
+  TextEditingController usernamecontroller = new TextEditingController();
+  TextEditingController passwordcontroller = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,7 +144,7 @@ class _AdminLogInState extends State<AdminLogIn> {
 
   loginAdmin() {
     FirebaseFirestore.instance.collection("Admin").get().then((snapshot) {
-      for (var result in snapshot.docs) {
+      snapshot.docs.forEach((result) {
         if (result.data()['username'] != usernamecontroller.text.trim()) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -171,7 +171,7 @@ class _AdminLogInState extends State<AdminLogIn> {
             MaterialPageRoute(builder: (context) => HomeAdmin()),
           );
         }
-      }
+      });
     });
   }
 }

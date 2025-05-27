@@ -19,8 +19,15 @@ class _OrderState extends State<Order> {
   }
 
   getontheload() async {
+    await getthesahredpref();
     orderStream = await DatabaseMethods().getUserOrder(id!);
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getontheload();
   }
 
   Stream? orderStream;
@@ -68,7 +75,7 @@ class _OrderState extends State<Order> {
                               ),
                               SizedBox(width: 10.0),
                               Text(
-                                "Near Market",
+                                ds["Address"],
                                 style: AppWidget.SimpleLineTextFieldStyle(),
                               ),
                             ],
@@ -87,7 +94,7 @@ class _OrderState extends State<Order> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    ds["Foodname"],
+                                    ds["FoodName"],
                                     style: AppWidget.boldTextFieldStyle(),
                                   ),
                                   SizedBox(height: 5.0),
@@ -166,10 +173,14 @@ class _OrderState extends State<Order> {
                 child: Column(
                   children: [
                     SizedBox(height: 20.0),
-                    SizedBox(
+                    Container(
                       height: MediaQuery.of(context).size.height / 1.5,
                       child: allOrders(),
                     ),
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).size.height / 1.5,
+                    //   child: allOrders(),
+                    // ),
                   ],
                 ),
               ),

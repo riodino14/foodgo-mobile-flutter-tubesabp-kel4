@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tubes_abp/model/burger_model.dart';
 import 'package:tubes_abp/model/pizza_model.dart';
 import 'package:tubes_abp/pages/detail_page.dart';
+import 'package:tubes_abp/service/database.dart';
 import 'package:tubes_abp/service/pizza_data.dart';
 import 'package:tubes_abp/service/widget_support.dart';
 import 'package:tubes_abp/model/category_model.dart';
 import 'package:tubes_abp/service/category_data.dart';
 import 'package:tubes_abp/service/burger_data.dart';
-import 'package:tubes_abp/service/database.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,7 +22,7 @@ class _HomeState extends State<Home> {
   List<CategoryModel> categories = [];
   List<PizzaModel> burger = [];
   List<BurgerModel> pizza = [];
-  String track = "0";
+  String track = "0"; // Track kategori aktif (0 = Pizza, 1 = Burger)
   bool search = false;
   TextEditingController searchcontroller = new TextEditingController();
 
@@ -29,42 +30,68 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     categories = getCategory();
-    pizza = getBurger();
-    burger = getPizza();
+    pizza = getBurger(); // Pizza data inisialisasi
+    burger = getPizza(); // Burger data inisialisasi
   }
 
-  var queryResultSet = [];
   var tempSearchStore = [];
+  bool isSearching =
+      false; // Menambahkan variabel untuk mengecek apakah pencarian aktif
 
+  // Fungsi untuk memulai pencarian
   initiateSearch(value) {
-    if (value.length == 0) {
-      setState(() {
-        queryResultSet = [];
-        tempSearchStore = [];
-      });
-    }
     setState(() {
-      search = true;
+      isSearching = true; // Menandakan bahwa pencarian sedang dilakukan
     });
 
-    var CapitalizedValue =
-        value.substring(0, 1).toUpperCase() + value.substring(1);
-    if (queryResultSet.isEmpty && value.length == 1) {
-      DatabaseMethods().search(value).then((QuerySnapshot docs) {
-        for (int i = 0; i < docs.docs.length; ++i) {
-          queryResultSet.add(docs.docs[i].data());
-        }
+    if (value.length == 0) {
+      setState(() {
+        tempSearchStore = []; // Menghapus hasil pencarian saat input kosong
       });
+      isSearching = false; // Reset pencarian
     } else {
-      tempSearchStore = [];
-      queryResultSet.forEach((element) {
-        if (element["Name"].startsWith(CapitalizedValue)) {
-          setState(() {
-            tempSearchStore.add(element);
-          });
-        }
+      setState(() {
+        tempSearchStore = []; // Reset hasil pencarian sebelum mencari
       });
+
+      // Pencarian berdasarkan kategori
+      if (track == "0") {
+        // Jika kategori pizza yang dipilih
+        pizza.forEach((element) {
+          if (element.name!.toLowerCase().contains(value.toLowerCase())) {
+            setState(() {
+              tempSearchStore.add(element); // Menambahkan item yang cocok
+            });
+          }
+        });
+      } else if (track == "1") {
+        // Jika kategori burger yang dipilih
+        burger.forEach((element) {
+          if (element.name!.toLowerCase().contains(value.toLowerCase())) {
+            setState(() {
+              tempSearchStore.add(element); // Menambahkan item yang cocok
+            });
+          }
+        });
+      }
     }
+  }
+
+  // Fungsi untuk reset pencarian ke tampilan awal berdasarkan kategori
+  resetSearch() {
+    setState(() {
+      tempSearchStore = []; // Menghapus hasil pencarian
+      if (track == "0") {
+        tempSearchStore.addAll(
+          pizza,
+        ); // Menampilkan semua pizza jika kategori pizza
+      } else if (track == "1") {
+        tempSearchStore.addAll(
+          burger,
+        ); // Menampilkan semua burger jika kategori burger
+      }
+      isSearching = false; // Reset pencarian
+    });
   }
 
   @override
@@ -121,7 +148,13 @@ class _HomeState extends State<Home> {
                     child: TextField(
                       controller: searchcontroller,
                       onChanged: (value) {
-                        initiateSearch(value.toUpperCase());
+                        if (value.isEmpty) {
+                          resetSearch(); // Reset ke tampilan awal jika input kosong
+                        } else {
+                          initiateSearch(
+                            value,
+                          ); // Lakukan pencarian jika ada input
+                        }
                       },
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -159,7 +192,40 @@ class _HomeState extends State<Home> {
               ),
             ),
             SizedBox(height: 10),
-            track == "0"
+            // Menampilkan hasil pencarian jika ada, atau pesan "Menu Tidak Ditemukan" jika tidak ada hasil
+            tempSearchStore.isNotEmpty
+                ? Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: GridView.builder(
+                      padding: EdgeInsets.zero,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.69,
+                        mainAxisSpacing: 20,
+                        crossAxisSpacing: 15,
+                      ),
+                      itemCount: tempSearchStore.length,
+                      itemBuilder: (context, index) {
+                        var item = tempSearchStore[index];
+                        return FoodTile(item.name!, item.image!, item.price!);
+                      },
+                    ),
+                  ),
+                )
+                : isSearching
+                ? Expanded(
+                  child: Center(
+                    child: Text(
+                      "Menu Tidak Ditemukan",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                )
+                : track == "0"
                 ? Expanded(
                   child: Container(
                     margin: EdgeInsets.only(right: 10),
@@ -279,6 +345,7 @@ class _HomeState extends State<Home> {
     return GestureDetector(
       onTap: () {
         track = categoryindex.toString();
+        resetSearch(); // Reset pencarian saat kategori dipilih
         setState(() {});
       },
       child:
@@ -290,7 +357,6 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(30),
                   child: Container(
                     padding: EdgeInsets.only(left: 20, right: 20),
-
                     decoration: BoxDecoration(
                       color: Color(0xffef2b39),
                       borderRadius: BorderRadius.circular(30),

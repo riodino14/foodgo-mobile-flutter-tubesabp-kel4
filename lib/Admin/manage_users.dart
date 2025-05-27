@@ -184,7 +184,7 @@ class _ManageUsersState extends State<ManageUsers> {
                   children: [
                     SizedBox(height: 20.0),
                     Container(
-                      height: MediaQuery.of(context).size.height / 2,
+                      height: MediaQuery.of(context).size.height / 1.2,
                       child: allUsers(),
                     ),
                   ],

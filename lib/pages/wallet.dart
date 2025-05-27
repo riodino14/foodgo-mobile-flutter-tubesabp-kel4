@@ -18,7 +18,7 @@ class Wallet extends StatefulWidget {
 }
 
 class _WalletState extends State<Wallet> {
-  TextEditingController amountcontroller = TextEditingController();
+  TextEditingController amountcontroller = new TextEditingController();
   Map<String, dynamic>? paymentIntent;
 
   String? email, wallet, id;
@@ -164,7 +164,7 @@ class _WalletState extends State<Wallet> {
                                                 AppWidget.boldTextFieldStyle(),
                                           ),
                                           Text(
-                                            "\$${wallet!}",
+                                            "\$" + wallet!,
                                             style:
                                                 AppWidget.HeadLineTextFieldStyle(),
                                           ),
@@ -303,7 +303,7 @@ class _WalletState extends State<Wallet> {
                                     Container(
                                       height:
                                           MediaQuery.of(context).size.height /
-                                          2.5,
+                                          3,
                                       child: allTransactions(),
                                     ),
                                   ],
@@ -351,7 +351,7 @@ class _WalletState extends State<Wallet> {
             await getUserWallet();
             setState(() {});
             DateTime now = DateTime.now();
-            String formattedDate = DateFormat("dd MMM").format(now);
+            String formattedDate = DateFormat("dd MMMM").format(now);
             Map<String, dynamic> userTransactions = {
               "Amount": amount,
               "Date": formattedDate,

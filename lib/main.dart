@@ -1,10 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:tubes_abp/Admin/admin_login.dart';
 import 'package:tubes_abp/Admin/all_order.dart';
 import 'package:tubes_abp/Admin/home_admin.dart';
 import 'package:tubes_abp/Admin/manage_users.dart';
 import 'package:tubes_abp/pages/bottomnav.dart';
+import 'package:tubes_abp/pages/signup.dart';
 import 'package:tubes_abp/service/constant.dart';
 
 void main() async {
