@@ -1,4 +1,4 @@
-Berikut adalah versi profesional dan lengkap dari **README.md** untuk proyek Flutter *Food Delivery* kelompok Anda berdasarkan semua informasi yang sudah Anda sampaikan:
+
 
 ---
 
@@ -8,40 +8,40 @@ Berikut adalah versi profesional dan lengkap dari **README.md** untuk proyek Flu
 > IF-46-04 – Informatika S1, Universitas Telkom
 > Periode: Maret 2025 – Juni 2025
 
-FoodGo adalah aplikasi pemesanan makanan digital berbasis **Flutter** yang dirancang untuk menyediakan pengalaman food delivery yang sederhana, efisien, dan user-friendly bagi pengguna dan admin. Aplikasi ini mendukung manajemen transaksi, dompet digital, hingga panel admin untuk memantau pesanan secara real-time.
+**FoodGo** adalah aplikasi food delivery berbasis Flutter yang dirancang untuk memberikan pengalaman pemesanan makanan yang cepat, sederhana, dan efisien. Aplikasi ini memiliki fitur lengkap untuk pengguna dan admin, termasuk dompet digital, manajemen pesanan, dan tampilan antarmuka yang modern dan responsif.
 
 ---
 
 ## 🚀 Fitur Utama
 
-### Untuk Pengguna (User)
+### Pengguna
 
-* 🔐 **Registrasi & Login** pengguna
-* 🍕 **Lihat Daftar Menu** makanan berdasarkan kategori
-* 🛒 **Pemesanan Makanan** dengan sistem dompet digital
-* 💼 **Top-up & Riwayat Transaksi**
-* 🔍 **Pencarian Menu**
-* 📦 **Riwayat Pesanan & Status (Pending / Delivered)**
-* 👤 **Manajemen Profil** (lihat data akun, hapus akun, logout)
+* 🔐 Registrasi dan login akun pengguna
+* 🍔 Daftar menu berdasarkan kategori makanan
+* 🛒 Pemesanan makanan dengan pengecekan saldo dompet
+* 💰 Top-up dan riwayat transaksi dompet
+* 📦 Riwayat dan status pesanan (Pending / Delivered)
+* 🔍 Pencarian menu makanan
+* 👤 Pengelolaan profil pengguna (logout dan hapus akun)
 
-### Untuk Admin
+### Admin
 
 * 🔐 Login khusus admin
-* 👥 **Manajemen Pengguna** (lihat & hapus akun)
-* 🧾 **Lihat & Kelola Semua Pesanan**
-* 💰 **Pantau Transaksi Dompet**
-* 🔍 **Fitur Pencarian data pengguna, transaksi, dan pesanan**
+* 📋 Manajemen data pengguna dan akun
+* 🧾 Monitoring semua pesanan pengguna
+* 💳 Pemantauan transaksi dompet pengguna
+* 🔍 Fitur pencarian pesanan, pengguna, dan transaksi
 
 ---
 
-## 📱 Teknologi yang Digunakan
+## 🧑‍💻 Teknologi yang Digunakan
 
-| Stack        | Deskripsi                       |
-| ------------ | ------------------------------- |
-| **Flutter**  | UI Framework utama aplikasi     |
-| **Dart**     | Bahasa pemrograman utama        |
-| **Firebase** | Autentikasi & Realtime Database |
-| **GitHub**   | Version Control & Kolaborasi    |
+| Stack        | Deskripsi                         |
+| ------------ | --------------------------------- |
+| **Flutter**  | Framework UI utama aplikasi       |
+| **Dart**     | Bahasa pemrograman utama          |
+| **Firebase** | Autentikasi dan realtime database |
+| **GitHub**   | Version control & kolaborasi tim  |
 
 ---
 
@@ -49,85 +49,82 @@ FoodGo adalah aplikasi pemesanan makanan digital berbasis **Flutter** yang diran
 
 ```
 tubes_abp/
-├── lib/               # Sumber kode utama aplikasi
-│   ├── pages/         # Halaman UI (Login, Home, Admin, Wallet, dsb.)
-│   ├── models/        # Model data seperti User, Orders
-│   ├── services/      # Integrasi Firebase
-│   └── widgets/       # Komponen UI custom
-├── images/            # Aset gambar (menu, ikon, dll.)
-├── android/           # Konfigurasi Android
+├── lib/               # Kode sumber utama
+│   ├── pages/         # Halaman UI (Home, Login, Admin, Wallet, dsb.)
+│   ├── models/        # Data model (User, Orders, Menu)
+│   ├── services/      # Integrasi ke Firebase
+│   └── widgets/       # Komponen UI reusable
+├── images/            # Gambar dan ikon menu
+├── android/           # Konfigurasi untuk platform Android
 ├── ios/               # Konfigurasi iOS
-├── web/               # Konfigurasi Web
-├── README.md          # Dokumentasi proyek
-└── pubspec.yaml       # Konfigurasi dependency
+├── web/               # Dukungan untuk Flutter Web
+├── README.md          # Dokumentasi proyek ini
+└── pubspec.yaml       # File dependency dan konfigurasi proyek
 ```
 
 ---
 
 ## ⚙️ Cara Menjalankan Proyek
 
-1. **Clone Repository**
+1. **Clone repository**
 
 ```bash
 git clone https://github.com/riodino14/tubes_abp.git
 cd tubes_abp
 ```
 
-2. **Install Dependencies**
+2. **Install dependencies**
 
 ```bash
 flutter pub get
 ```
 
-3. **Jalankan di Emulator/Web**
+3. **Jalankan proyek di emulator atau browser**
 
 ```bash
 flutter run
 ```
 
-> Pastikan Anda sudah login ke Firebase Console dan mengatur project serta konfigurasi `google-services.json` dan `GoogleService-Info.plist`.
+> Pastikan konfigurasi Firebase sudah terhubung dan file `google-services.json` (Android) serta `GoogleService-Info.plist` (iOS) telah disiapkan sesuai environment.
 
 ---
 
-## 👨‍💻 Anggota Tim & Pembagian Tugas
+## 📸 Cuplikan Fitur
 
-| Nama                         | NIM        | Tugas                                                 |
-| ---------------------------- | ---------- | ----------------------------------------------------- |
-| **Riodino Raihan**           | 1301220413 | UI onboarding & home page                             |
-| **Abdurrahman Azzam**        | 1301223137 | UI detail produk, sign up, dan login                  |
-| **Rusdi Affandi**            | 1301223361 | Integrasi Firebase dan backend login/signup           |
-| **Muhammad Fakhrul Hizrian** | 1301223174 | Backend halaman detail, pemesanan, dan transaksi      |
-| **Fauzi Zaidan Pratama**     | 1301223053 | UI & backend Wallet, admin login                      |
-| **Faiq Misbah Yazdi**        | 1301223228 | Admin dashboard, manajemen transaksi, fitur pencarian |
-
----
-
-## 📸 Cuplikan Tampilan
-
-* Page Onboarding
-* Sign Up / Login Page
-* Home Page (kategori menu)
-* Order Page
-* Wallet & Riwayat Transaksi
-* Admin Dashboard & Order Management
-
-📂 Lihat lebih lanjut di folder `images/`.
+* ✅ Onboarding Page
+* ✅ Halaman Sign Up & Sign In
+* ✅ Home Page (Menu Makanan)
+* ✅ Halaman Order Makanan
+* ✅ Fitur Wallet & Top Up
+* ✅ Status Pesanan (Pending / Delivered)
+* ✅ Dashboard Admin & Manajemen Pesanan
 
 ---
 
-## 🔮 Pengembangan Selanjutnya
+## 🔮 Rencana Pengembangan Lanjutan
 
-* [ ] Notifikasi Real-time untuk Pesanan
-* [ ] Tracking Lokasi Kurir (GPS)
-* [ ] Ulasan & Rating Menu
-* [ ] Dashboard UMKM (Analytics)
+* [ ] Notifikasi status pesanan (push notification)
+* [ ] Tracking pengantaran berbasis lokasi (GPS)
+* [ ] Fitur ulasan dan rating makanan
+* [ ] Dashboard analitik untuk mitra restoran
+
+---
+
+## 👨‍👩‍👧‍👦 Anggota Kelompok IF-46-04
+
+| Nama                     | NIM        |
+| ------------------------ | ---------- |
+| Riodino Raihan           | 1301220413 |
+| Abdurrahman Azzam        | 1301223137 |
+| Faiq Misbah Yazdi        | 1301223228 |
+| Fauzi Zaidan Pratama     | 1301223053 |
+| Rusdi Affandi            | 1301223361 |
+| Muhammad Fakhrul Hizrian | 1301223174 |
 
 ---
 
 ## 📄 Lisensi
 
-Proyek ini dibuat sebagai bagian dari tugas besar kuliah dan **tidak untuk keperluan komersial**. Semua hak cipta gambar/menu dimiliki oleh pemilik aslinya.
+Proyek ini dibuat untuk keperluan akademik dalam mata kuliah Aplikasi Berbasis Platform di Universitas Telkom. Seluruh konten hanya digunakan untuk keperluan pendidikan.
 
 ---
-
-Jika Anda butuh versi README ini dalam bahasa Indonesia penuh atau ingin README bilingual (ENG-ID), saya bisa bantu juga!
