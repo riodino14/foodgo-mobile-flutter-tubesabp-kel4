@@ -24,15 +24,14 @@ class AppWidget {
   static TextStyle boldTextFieldStyle() {
     return TextStyle(
       color: Colors.black,
-      fontSize: 20,
+      fontSize: 18,
       fontWeight: FontWeight.bold,
     );
   }
 
-  
   static TextStyle priceTextFieldStyle() {
     return TextStyle(
-      color: const Color.fromARGB(174 , 0, 0, 0),
+      color: const Color.fromARGB(174, 0, 0, 0),
       fontSize: 24,
       fontWeight: FontWeight.bold,
     );
@@ -48,7 +47,7 @@ class AppWidget {
 
   static TextStyle SignUpTextFieldStyle() {
     return TextStyle(
-      color: const Color.fromARGB(174 , 0, 0, 0),
+      color: const Color.fromARGB(174, 0, 0, 0),
       fontSize: 20.0,
       fontWeight: FontWeight.bold,
     );

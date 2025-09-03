@@ -46,7 +46,7 @@ class _ProfileState extends State<Profile> {
             CircleAvatar(
               radius: 50.0, // Radius untuk gambar profil
               backgroundImage: AssetImage(
-                'images/Faiq.png',
+                'images/user.png',
               ), // Menampilkan gambar dari assets
             ),
             SizedBox(height: 10.0),
@@ -199,7 +199,7 @@ class _ProfileState extends State<Profile> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                
+
                                 Spacer(),
                                 Icon(
                                   Icons.arrow_forward_ios_outlined,

@@ -3,9 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tubes_abp/model/burger_model.dart';
 import 'package:tubes_abp/model/pizza_model.dart';
+import 'package:tubes_abp/model/kebab_model.dart'; //
+import 'package:tubes_abp/model/snack_model.dart'; //
 import 'package:tubes_abp/pages/detail_page.dart';
 import 'package:tubes_abp/service/database.dart';
 import 'package:tubes_abp/service/pizza_data.dart';
+import 'package:tubes_abp/service/kebab_data.dart';
+import 'package:tubes_abp/service/snack_data.dart';
 import 'package:tubes_abp/service/widget_support.dart';
 import 'package:tubes_abp/model/category_model.dart';
 import 'package:tubes_abp/service/category_data.dart';
@@ -20,9 +24,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<CategoryModel> categories = [];
-  List<PizzaModel> burger = [];
-  List<BurgerModel> pizza = [];
-  String track = "0"; // Track kategori aktif (0 = Pizza, 1 = Burger)
+  List<BurgerModel> burger = [];
+  List<PizzaModel> pizza = [];
+  List<KebabModel> kebab = [];
+  List<SnackModel> snack = [];
+  String track = "0"; // Track kategori aktif (0 = Burger, 1 = Pizza, 2 = Kebab, 3 = Snack)
   bool search = false;
   TextEditingController searchcontroller = new TextEditingController();
 
@@ -30,8 +36,10 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     categories = getCategory();
-    pizza = getBurger(); // Pizza data inisialisasi
-    burger = getPizza(); // Burger data inisialisasi
+    burger = getBurger(); // Burger data inisialisasi
+    pizza = getPizza(); // Pizza data inisialisasi
+    kebab = getKebab(); // kebab data inisialisasi
+    snack = getSnack(); // Snack data inisialisasi
   }
 
   var tempSearchStore = [];
@@ -56,6 +64,15 @@ class _HomeState extends State<Home> {
 
       // Pencarian berdasarkan kategori
       if (track == "0") {
+        // Jika kategori burger yang dipilih
+        burger.forEach((element) {
+          if (element.name!.toLowerCase().contains(value.toLowerCase())) {
+            setState(() {
+              tempSearchStore.add(element); // Menambahkan item yang cocok
+            });
+          }
+        });
+      } else if (track == "1") {
         // Jika kategori pizza yang dipilih
         pizza.forEach((element) {
           if (element.name!.toLowerCase().contains(value.toLowerCase())) {
@@ -64,9 +81,18 @@ class _HomeState extends State<Home> {
             });
           }
         });
-      } else if (track == "1") {
-        // Jika kategori burger yang dipilih
-        burger.forEach((element) {
+      } else if (track == "2") {
+        // Jika kategori kebab yang dipilih
+        kebab.forEach((element) {
+          if (element.name!.toLowerCase().contains(value.toLowerCase())) {
+            setState(() {
+              tempSearchStore.add(element); // Menambahkan item yang cocok
+            });
+          }
+        });
+      } else if (track == "3") {
+        // Jika kategori snack yang dipilih
+        snack.forEach((element) {
           if (element.name!.toLowerCase().contains(value.toLowerCase())) {
             setState(() {
               tempSearchStore.add(element); // Menambahkan item yang cocok
@@ -83,12 +109,20 @@ class _HomeState extends State<Home> {
       tempSearchStore = []; // Menghapus hasil pencarian
       if (track == "0") {
         tempSearchStore.addAll(
-          pizza,
-        ); // Menampilkan semua pizza jika kategori pizza
-      } else if (track == "1") {
-        tempSearchStore.addAll(
           burger,
         ); // Menampilkan semua burger jika kategori burger
+      } else if (track == "1") {
+        tempSearchStore.addAll(
+          pizza,
+        ); // Menampilkan semua pizza jika kategori pizza
+      } else if (track == "2") {
+        tempSearchStore.addAll(
+          kebab,
+        ); // Menampilkan semua kebab jika kategori kebab
+      } else if (track == "3") {
+        tempSearchStore.addAll(
+          snack,
+        ); // Menampilkan semua snack jika kategori snack
       }
       isSearching = false; // Reset pencarian
     });
@@ -124,7 +158,7 @@ class _HomeState extends State<Home> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
-                      "images/Faiq.png",
+                      "images/user.png",
                       height: 60,
                       width: 60,
                       fit: BoxFit.cover,
@@ -237,12 +271,12 @@ class _HomeState extends State<Home> {
                         mainAxisSpacing: 20,
                         crossAxisSpacing: 15,
                       ),
-                      itemCount: pizza.length,
+                      itemCount: burger.length,
                       itemBuilder: (context, index) {
                         return FoodTile(
-                          pizza[index].name!,
-                          pizza[index].image!,
-                          pizza[index].price!,
+                          burger[index].name!,
+                          burger[index].image!,
+                          burger[index].price!,
                         );
                       },
                     ),
@@ -260,12 +294,58 @@ class _HomeState extends State<Home> {
                         mainAxisSpacing: 20,
                         crossAxisSpacing: 15,
                       ),
-                      itemCount: burger.length,
+                      itemCount: pizza.length,
                       itemBuilder: (context, index) {
                         return FoodTile(
-                          burger[index].name!,
-                          burger[index].image!,
-                          burger[index].price!,
+                          pizza[index].name!,
+                          pizza[index].image!,
+                          pizza[index].price!,
+                        );
+                      },
+                    ),
+                  ),
+                )
+                : track == "2"
+                ? Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: GridView.builder(
+                      padding: EdgeInsets.zero,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.69,
+                        mainAxisSpacing: 20,
+                        crossAxisSpacing: 15,
+                      ),
+                      itemCount: kebab.length,
+                      itemBuilder: (context, index) {
+                        return FoodTile(
+                          kebab[index].name!,
+                          kebab[index].image!,
+                          kebab[index].price!,
+                        );
+                      },
+                    ),
+                  ),
+                )
+                : track == "3"
+                ? Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: GridView.builder(
+                      padding: EdgeInsets.zero,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.69,
+                        mainAxisSpacing: 20,
+                        crossAxisSpacing: 15,
+                      ),
+                      itemCount: snack.length,
+                      itemBuilder: (context, index) {
+                        return FoodTile(
+                          snack[index].name!,
+                          snack[index].image!,
+                          snack[index].price!,
                         );
                       },
                     ),

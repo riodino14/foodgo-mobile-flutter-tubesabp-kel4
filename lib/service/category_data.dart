@@ -17,14 +17,14 @@ List<CategoryModel> getCategory() {
   categoryModel = CategoryModel();
 
   //3
-  categoryModel.image = "images/chinese.png";
-  categoryModel.name = "Chinese";
+  categoryModel.image = "images/kebab.png";
+  categoryModel.name = "Kebab";
   category.add(categoryModel);
   categoryModel = CategoryModel();
 
   //4
-  categoryModel.image = "images/tacos.png";
-  categoryModel.name = "Mexican";
+  categoryModel.image = "images/snack.png";
+  categoryModel.name = "Snack";
   category.add(categoryModel);
   categoryModel = CategoryModel();
 

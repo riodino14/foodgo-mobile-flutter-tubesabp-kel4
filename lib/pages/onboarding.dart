@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tubes_abp/Admin/admin_login.dart';
 import 'package:tubes_abp/pages/signup.dart';
 import 'package:tubes_abp/service/widget_support.dart';
-import 'package:tubes_abp/pages/signup.dart'; // Import Sign Up Page
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -35,13 +35,8 @@ class _OnboardingState extends State<Onboarding> {
             SizedBox(height: 30.0),
             GestureDetector(
               onTap: () {
-                // Navigate to Sign Up page when the button is pressed
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SignUp(),
-                  ), // Replace with your Sign Up page
-                );
+                // Show the login box when the button is clicked
+                _showLoginOptions(context);
               },
               child: Container(
                 width: MediaQuery.of(context).size.width / 2,
